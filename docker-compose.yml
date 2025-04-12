@@ -2,6 +2,7 @@ services:
   app:
     build:
       context: ./backend
+      dockerfile: Dockerfile
       args:
         - DEV=true
     ports:
@@ -28,6 +29,20 @@ services:
       - POSTGRES_DB=shopdb
       - POSTGRES_USER=devkonrad
       - POSTGRES_PASSWORD=konradpass
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - app
 
 
 volumes:
