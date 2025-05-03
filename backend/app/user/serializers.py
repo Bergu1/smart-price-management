@@ -8,14 +8,31 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 
+from django.contrib.auth import (
+  get_user_model,
+  authenticate
+)
+
+from django.utils.translation import gettext as _
+from rest_framework import serializers
+
+
 class UserSerializer(serializers.ModelSerializer):
+  verification_code = serializers.CharField(write_only=True, required=False)
 
   class Meta:
     model = get_user_model()
-    fields = ['email', 'password', 'name', 'is_employee']
+    fields = ['email', 'password', 'name', 'is_employee', 'verification_code']
     extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
   def create(self, validated_data):
+    is_employee = validated_data.get('is_employee', False)
+    code = validated_data.pop('verification_code', None)
+
+    if is_employee:
+      if code != "ABC123":  
+        raise serializers.ValidationError({"verification_code": "Nieprawidłowy kod pracownika."})
+
     return get_user_model().objects.create_user(**validated_data)
   
   def update(self, instance, validated_data):
@@ -27,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
       user.save()
     
     return user
+
   
 
 class AuthTokenSerializer(serializers.Serializer):

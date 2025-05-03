@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { login } from '../api';
+import './LoginForm.css';
 
 const LoginForm = ({ setToken }) => {
   const [form, setForm] = useState({ email: '', password: '' });

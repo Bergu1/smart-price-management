@@ -22,8 +22,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         data = {
             "name": product.name_product,
-            "quantity": product.quantity_available,
-            "expiry": str(product.expiry_date),
+            "country" : product.product_country,
             "price": float(product.price)
         }
 

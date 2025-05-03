@@ -13,16 +13,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Product',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name_product', models.CharField(max_length=255)),
-                ('quantity_available', models.PositiveIntegerField()),
-                ('expiry_date', models.DateField()),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-            ],
-        ),
-        migrations.CreateModel(
             name='User',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

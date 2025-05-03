@@ -1,17 +1,20 @@
+// Updated ProductDashboard.jsx with centered layout and single logout button
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './ProductDashboard.css';
 
-const ProductDashboard = ({ token }) => {
-  console.log("TOKEN:", token);
+const ProductDashboard = ({ token, onLogout }) => {
   const [products, setProducts] = useState([]);
   const [editedProducts, setEditedProducts] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await axios.get('http://localhost:8000/api/products/', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setProducts(res.data);
+      const sorted = [...res.data].sort((a, b) => a.name_product.localeCompare(b.name_product));
+      setProducts(sorted);
     };
     fetchProducts();
   }, [token]);
@@ -30,8 +33,6 @@ const ProductDashboard = ({ token }) => {
 
   const handleSave = async (id) => {
     const updated = editedProducts[id];
-    console.log("Wysyłane dane:", updated); // ← dodaj to
-  
     try {
       await axios.put(`http://localhost:8000/api/products/${id}/`, updated, {
         headers: { Authorization: `Bearer ${token}` },
@@ -43,51 +44,60 @@ const ProductDashboard = ({ token }) => {
       console.error(err);
     }
   };
-  
+
+  const filteredProducts = products.filter((p) =>
+    p.name_product.toLowerCase().startsWith(searchQuery.toLowerCase())
+  );
+
+  const handleGoToAddProduct = () => {
+    window.location.href = '/add-product';
+  };
 
   return (
-    <div>
+    <div className="panel">
       <h2>Panel produktów</h2>
-      {products.length === 0 ? (
+
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Szukaj po nazwie..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      {filteredProducts.length === 0 ? (
         <p>Brak produktów</p>
       ) : (
         <table>
           <thead>
             <tr>
               <th>Nazwa</th>
-              <th>Ilość</th>
-              <th>Termin ważności</th>
+              <th>Kraj pochodzenia</th>
               <th>Cena</th>
               <th>Akcja</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((p) => (
+            {filteredProducts.map((p) => (
               <tr key={p.id}>
-                <td>
+                <td data-label="Nazwa">
                   <input
                     name="name_product"
                     defaultValue={p.name_product}
                     onChange={(e) => handleChange(e, p.id)}
                   />
                 </td>
-                <td>
+
+                <td data-label="Kraj pochodzenia">
                   <input
-                    name="quantity_available"
-                    type="number"
-                    defaultValue={p.quantity_available}
+                    name="product_country"
+                    defaultValue={p.product_country}
                     onChange={(e) => handleChange(e, p.id)}
                   />
                 </td>
-                <td>
-                  <input
-                    name="expiry_date"
-                    type="date"
-                    defaultValue={p.expiry_date}
-                    onChange={(e) => handleChange(e, p.id)}
-                  />
-                </td>
-                <td>
+
+                <td data-label="Cena">
                   <input
                     name="price"
                     type="number"
@@ -96,7 +106,7 @@ const ProductDashboard = ({ token }) => {
                     onChange={(e) => handleChange(e, p.id)}
                   />
                 </td>
-                <td>
+                <td data-label="Akcja">
                   <button onClick={() => handleSave(p.id)}>Zapisz</button>
                 </td>
               </tr>
@@ -104,6 +114,14 @@ const ProductDashboard = ({ token }) => {
           </tbody>
         </table>
       )}
+
+      <div className="add-product-wrapper">
+        <button className="add-product-button" onClick={handleGoToAddProduct}>
+          Dodaj nowy produkt
+        </button>
+      </div>
+
+      <button className="logout-button" onClick={onLogout}>Wyloguj</button>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getProfile, updateProfile } from '../api';
+import './Profile.css';
+
 
 const Profile = ({ token }) => {
   const [user, setUser] = useState(null);

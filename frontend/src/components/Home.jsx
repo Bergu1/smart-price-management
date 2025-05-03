@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getProfile } from '../api';
+import './Home.css';
 
 const Home = ({ token }) => {
   const [user, setUser] = useState(null);

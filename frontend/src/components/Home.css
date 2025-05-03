@@ -1,0 +1,25 @@
+div h2 {
+  color: #1976d2;
+  margin-bottom: 1rem;
+}
+
+div p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+div button {
+  padding: 0.8rem 1.5rem;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+div button:hover {
+  background-color: #145ca8;
+}

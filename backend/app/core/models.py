@@ -38,8 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Product(models.Model):
     name_product = models.CharField(max_length=255)
-    quantity_available = models.PositiveIntegerField()
-    expiry_date = models.DateField()
+    product_country = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):

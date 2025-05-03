@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import './AuthPage.css'
 
 const AuthPage = ({ setToken }) => {
   const [isRegistering, setIsRegistering] = useState(false);
