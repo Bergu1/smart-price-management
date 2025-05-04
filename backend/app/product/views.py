@@ -2,11 +2,23 @@ from rest_framework import viewsets
 from core.models import Product
 from .serializers import ProductSerializer
 import requests
-import time 
+import time
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    parser_classes = [MultiPartParser, FormParser] 
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+    
+    
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        print("DEBUG - request.data:", request.data)
+        return super().update(request, *args, **kwargs)
+
 
     def perform_create(self, serializer):
         instance = serializer.save()

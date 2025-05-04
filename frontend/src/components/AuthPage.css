@@ -22,3 +22,10 @@ div button:hover {
   color: #145ca8;
   text-decoration: underline;
 }
+
+.check-if-account {
+   margin: auto;
+   width: 20%;
+   border: 3px solid #145ca8;
+   padding: 10px;
+}

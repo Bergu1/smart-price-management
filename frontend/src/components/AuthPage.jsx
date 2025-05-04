@@ -11,7 +11,7 @@ const AuthPage = ({ setToken }) => {
       {isRegistering ? (
         <>
           <RegisterForm />
-          <p>
+          <p class="check-if-account">
             Masz już konto?{' '}
             <button onClick={() => setIsRegistering(false)}>
               Zaloguj się
@@ -21,7 +21,7 @@ const AuthPage = ({ setToken }) => {
       ) : (
         <>
           <LoginForm setToken={setToken} />
-          <p>
+          <p class="check-if-account">
             Nie masz konta?{' '}
             <button onClick={() => setIsRegistering(true)}>
               Zarejestruj się

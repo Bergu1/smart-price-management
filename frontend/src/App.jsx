@@ -4,6 +4,7 @@ import AuthPage from './components/AuthPage';
 import Home from './components/Home';
 import ProductDashboard from './components/ProductDashboard';
 import AddProduct from './components/AddProduct';
+import ProductDetails from './components/ProductDetails';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
       <Route path="/" element={token ? <Home token={token} /> : <AuthPage setToken={setToken} />} />
       <Route path="/dashboard" element={token ? <ProductDashboard token={token} onLogout={() => { localStorage.removeItem('token'); setToken(null); }} /> : <Navigate to="/" />} />
       <Route path="/add-product" element={token ? <AddProduct token={token} /> : <Navigate to="/" />} />
+      <Route path="/products/:id" element={token ? <ProductDetails token={token} /> : <Navigate to="/" />} />
     </Routes>
   </div>
 </Router>

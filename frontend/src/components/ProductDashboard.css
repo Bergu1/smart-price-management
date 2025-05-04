@@ -146,3 +146,7 @@ button:hover {
 .add-product-button {
   margin-top: 10px;
 }
+
+button[style*="red"] svg {
+  stroke: red;
+}
