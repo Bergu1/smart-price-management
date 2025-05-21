@@ -38,10 +38,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             "price": float(product.price)
         }
 
-        url = f"http://192.168.147.15/update{product.id}"
+        print("Proba laczenia")
+        url = f"http://192.168.201.15/update{product.id}"
+        print("polaczono")
 
         try:
-            requests.post(url, json=data, timeout=5)  # Zwiększony timeout
+            requests.post(url, json=data, timeout=10)  # Zwiększony timeout
             time.sleep(2)  # DODAJ TO: daje czas ESP na przetworzenie
         except Exception as e:
             print("Błąd wysyłania danych do ESP:", e)

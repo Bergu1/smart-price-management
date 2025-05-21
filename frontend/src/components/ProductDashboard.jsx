@@ -44,6 +44,10 @@ const ProductDashboard = ({ token, onLogout }) => {
   
       // Jeśli wartość to null, undefined lub pusty string – pomiń
       if (value === null || value === undefined || value === 'null') continue;
+
+      if (key === 'product_image' && typeof value === 'string' && value.startsWith('http')) {
+        continue;
+      }
   
       formData.append(key, value);
     }
