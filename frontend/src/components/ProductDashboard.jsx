@@ -10,16 +10,24 @@ const ProductDashboard = ({ token, onLogout }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
       const res = await axios.get('http://localhost:8000/api/products/', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const sorted = [...res.data].sort((a, b) => a.name_product.localeCompare(b.name_product));
       setProducts(sorted);
-    };
-    fetchProducts();
-  }, [token]);
+    } catch (err) {
+      console.error("❌ Błąd przy pobieraniu produktów:", err);
+    }
+  };
+
+  fetchProducts();
+  const interval = setInterval(fetchProducts, 5000);
+  return () => clearInterval(interval);
+}, [token]);
+
 
   const handleChange = (e, id) => {
     const { name, value } = e.target;
@@ -65,7 +73,16 @@ const ProductDashboard = ({ token, onLogout }) => {
       console.error(err);
     }
   };
-  
+
+  const getAvailabilityStatus = (distance) => {
+  if (distance < 120) {
+    return { label: 'Dostępny', color: 'green' };
+  } else if (distance >= 120 && distance < 150) {
+    return { label: 'Lekki brak', color: 'orange' };
+  } else {
+    return { label: 'Brak', color: 'red' };
+  }
+};
   
 
   const handleDelete = async (id) => {
@@ -111,11 +128,12 @@ const ProductDashboard = ({ token, onLogout }) => {
         <p>Brak produktów</p>
       ) : (
         <table>
-          <thead>
+         <thead>
             <tr>
               <th>Nazwa</th>
               <th>Kraj pochodzenia</th>
               <th>Cena</th>
+              <th>Dostępność</th>
               <th>Akcje</th>
             </tr>
           </thead>
@@ -145,6 +163,13 @@ const ProductDashboard = ({ token, onLogout }) => {
                     onChange={(e) => handleChange(e, p.id)}
                   />
                 </td>
+                <td data-label="Dostępność">
+                  {p.distance != null ? (
+                    <span style={{ color: getAvailabilityStatus(p.distance).color, fontWeight: 'bold' }}>
+                      {getAvailabilityStatus(p.distance).label}
+                    </span>
+                  ) : '—'}
+                </td>
                 <td data-label="Akcje">
                   <button onClick={() => handleGoToDetails(p.id)}>Opis</button>{' '}
                   <button onClick={() => handleSave(p.id)}>Zapisz</button>{' '}
@@ -155,6 +180,7 @@ const ProductDashboard = ({ token, onLogout }) => {
               </tr>
             ))}
           </tbody>
+
         </table>
       )}
 
